@@ -692,7 +692,13 @@
             <div class="overlay-card">
                 <button class="close-btn" onclick="fecharOverlay('gibi-overlay')">&times;</button>
                 <h2 style="text-align: center; color: var(--primary); margin-bottom: 20px;">Gibi Educativo</h2>
-                <img id="pagina" src="" alt="Página do Gibi" style="width:100%; max-width:700px; display:block; margin:20px auto; border-radius:8px;">
+                <div id="img-container" style="position: relative; min-height: 300px; display: flex; align-items: center; justify-content: center; background: #f0f0f0; border-radius: 8px; margin: 20px auto; max-width: 700px;">
+                    <img id="pagina" src="" alt="Página do Gibi" style="width:100%; border-radius:8px; display: block;" onerror="handleImgError(this)">
+                    <div id="img-error" style="display:none; position: absolute; color: #c62828; text-align: center; padding: 20px;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <p>Erro ao carregar imagem.<br><small id="img-path-display"></small></p>
+                    </div>
+                </div>
                 <p id="contador" style="text-align: center; font-weight: 600; margin: 10px 0; color: var(--text);"></p>
                 <div style="display:flex; justify-content:center; gap:1rem; margin-top:20px;">
                     <button class="btn" onclick="anterior()">Anterior</button>
@@ -990,8 +996,23 @@
         let paginaAtual = 0;
         
         function atualizarGibi() {
-            document.getElementById("pagina").src = paginas[paginaAtual];
+            const img = document.getElementById("pagina");
+            const errorDiv = document.getElementById("img-error");
+            const pathDisplay = document.getElementById("img-path-display");
+            
+            img.style.display = 'block';
+            errorDiv.style.display = 'none';
+            
+            img.src = paginas[paginaAtual];
             document.getElementById("contador").innerText = `Página ${paginaAtual + 1} de ${paginas.length}`;
+        }
+
+        function handleImgError(img) {
+            img.style.display = 'none';
+            const errorDiv = document.getElementById("img-error");
+            const pathDisplay = document.getElementById("img-path-display");
+            errorDiv.style.display = 'block';
+            pathDisplay.innerText = "Verifique se o arquivo '" + paginas[paginaAtual] + "' está na mesma pasta que este HTML.";
         }
         
         function proxima() {
